@@ -43,8 +43,13 @@ exports.loginUser = async(req,res)=>{
             return  res.status(400).json({ message: 'Invalid email or password' });
           }
           const token = jwt.sing({userId : user._id , role: user.role}, secret,{expiresIn: '1h'});
+          res.status(200).json({
+            message: 'Login successful',
+            token,
+            role:user.role
+        });
     } catch (error) {
-        return   res.status(500).json({ message: 'Error registering user', error: error.message });
+        return   res.status(500).json({ message: 'Error registering user', error: error.message  });
 
     }
-}
+};
