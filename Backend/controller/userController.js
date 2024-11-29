@@ -1,6 +1,7 @@
 const User = require('../model/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { profile } = require('console');
 
 const secret = "Kishan@1156";
 
@@ -15,12 +16,15 @@ const registerUser = async(req,res)=>{
          if(existingUser){
            return res.status(400).json({msg:"User is Already Existing "});
          }
+         const profilePicturePath = req.file ? req.file.path : null;
+   
          const newUser = {
            userName , 
            email,
            password,
            role,
-           bio
+           bio,
+           profile : profilePicturePath
          }
          const addData = await User(newUser);
          await addData.save();
