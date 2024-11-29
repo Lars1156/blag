@@ -1,6 +1,7 @@
 import {Routes, Route} from 'react-router-dom'
 import NavigationBar from "./component/NavigationBar";
 import HomePage from './component/Pages/HomePage';
+import RegisterPage from './component/Pages/RegisterPage';
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Routes>
     
         <Route path='/' element={<HomePage/>}/>
+        <Route path='/signup' element={<RegisterPage/>}/>
       </Routes>
       
     </div>

@@ -1,7 +1,7 @@
 const User = require('../model/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { profile } = require('console');
+
 
 const secret = "Kishan@1156";
 
