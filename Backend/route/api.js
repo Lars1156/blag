@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controller/userController');
-const upload = require('../middleware/uploadFile')
+const upload = require('../middleware/uploadFile'); // Make sure the path is correct
 
-// User Api 
-router.post('/register' , upload.single('profile'), userController.registerUser );
-router.post('/login' , userController.loginUser)
+// User API routes
+router.post('/register',upload.uploadFiles, userController.registerUser);
+router.post('/login', userController.loginUser); // User login
 
 module.exports = router;

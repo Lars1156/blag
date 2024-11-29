@@ -11,7 +11,7 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const [bio, setBio] = useState('');
   const [role, setRole] = useState('Reader'); // Default role set to Reader
-  const [profilePicture, setProfilePicture] = useState(null);
+  const [image, setimage] = useState(null);
   const [error, setError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ const RegisterPage = () => {
   };
 
   const handleFileChange = (e) => {
-    setProfilePicture(e.target.files[0]);
+    setimage(e.target.files[0]);
   };
 
   const handleRegister = async (e) => {
@@ -47,8 +47,8 @@ const RegisterPage = () => {
     formData.append('password', password);
     formData.append('role', role);
     formData.append('bio', bio);
-    if (profilePicture) {
-      formData.append('profilePicture', profilePicture);
+    if (image) {
+      formData.append('image', image);
     }
 
     setLoading(true);
@@ -167,15 +167,15 @@ const RegisterPage = () => {
               onChange={(e) => setRole(e.target.value)}
               required
             >
-              <option value="Admin">Admin</option>
-              <option value="Author">Author</option>
-              <option value="Reader">Reader</option>
+              <option value="admin">Admin</option>
+              <option value="author">Author</option>
+              <option value="reader">Reader</option>
             </select>
           </div>
 
           {/* Profile Picture */}
           <div className="mb-3">
-            <label htmlFor="profilePicture" className="form-label">
+            <label htmlFor="image" className="form-label">
               Profile Picture
             </label>
             <input

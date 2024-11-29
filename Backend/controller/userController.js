@@ -16,7 +16,8 @@ const registerUser = async(req,res)=>{
          if(existingUser){
            return res.status(400).json({msg:"User is Already Existing "});
          }
-         const profilePicturePath = req.file ? req.file.path : null;
+        //  const image = req.file ? req.file[0].path : null;
+        const imagefile = req.files?.image?.[0]?.filename
    
          const newUser = {
            userName , 
@@ -24,7 +25,7 @@ const registerUser = async(req,res)=>{
            password,
            role,
            bio,
-           profile : profilePicturePath
+           image : imagefile
          }
          const addData = await User(newUser);
          await addData.save();

@@ -1,32 +1,44 @@
-const multer= require('multer');
-const path = require('path');
+// import multer from 'multer';
+// import path from 'path';
 
-const stoarge = multer.diskStorage(
-    {
-        destination: function(req , file , cb){
-            cb(null, path.join(__dirname, 'uploads/'));
-        },
-        filename: (req, file, cb) => {
-            const uniqueName = `${Date.now()}-${file.originalname}`;
-            cb(null, uniqueName);
-          },
-    }
-);
+const multer = require("multer")
+const path = require("path")
 
-// File filter to accept only specific types
+
+// Set up Multer storage engine
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.resolve('./uploads');
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+// Multer file filter to allow images and videos
 const fileFilter = (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error('Invalid file type. Only JPEG, PNG, and JPG are allowed.'));
-    }
-  };
+  const allowedTypes = /jpeg|jpg|png|gif|mp4|mov|avi/;
+  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = allowedTypes.test(file.mimetype);
 
-  const upload = multer({
-    stoarge,
-    limits: { fileSize: 2 * 1024 * 1024 }, // Limit file size to 2MB
-    fileFilter,
-  });
+  if (extname && mimetype) {
+    return cb(null, true);
+  } else {
+    return cb(new Error('Invalid file type'));
+  }
+};
 
-  module.exports = upload;
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: { fileSize: 100 * 1024 * 1024 }, // 100MB file size limit
+});
+
+// Route handler to handle multiple file uploads (images and videos)
+const uploadFiles = upload.fields([
+  { name: 'image' },  // Name in the form for image files
+  { name: 'videos' },  // Name in the form for video files
+]);
+
+module.exports = { uploadFiles };
