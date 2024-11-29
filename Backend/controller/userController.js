@@ -1,65 +1,70 @@
 const User = require('../model/user');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
 const secret = "Kishan@1156";
 
-
 const registerUser = async(req,res)=>{
-  const {userName , email , password , role} = req.body;
-  console.log(req.body);
+  const {userName , email , password , role , bio , } = req.body;
   try {
-    // const existingUser = await User.find({email});
-    // if(existingUser){
-    //     return res.status(404).json({msg:"User is Already Exists"});
-    // }
-    const newUser = new User({
-        userName,
-        email,
-        password,
-        role
-    });
-    await newUser.save();
-    res.status(201).json({
-        message: 'User registered successfully!',
-        user: {
-          userName: newUser.userName,
-          email: newUser.email,
-          role: newUser.role
+
+        if(!userName|| !email || !password || !role || !bio){
+          return res.status(400).json({msg:"Enter the all Reaquired fields"});
         }
-      });
-} catch (error) {
-  return   res.status(500).json({ message: 'Error registering user', error: error.message });
-}
-}
-
-
-
-const loginUser = async(req,res)=>{
-  try {
-    const{email , password} = req.body;
-    console.log(req.body);
-    
-    const user = await User.findOne({email});
-    if(!user){
-      return  res.status(400).json({ message: 'Invalid email or password' });
+         const existingUser = await User.findOne({email});
+         if(existingUser){
+           return res.status(400).json({msg:"User is Already Existing "});
+         }
+         const newUser = {
+           userName , 
+           email,
+           password,
+           role,
+           bio
+         }
+         const addData = await User(newUser);
+         await addData.save();
+         return res.status(200).json({ msg: 'User successfully created' });
+    } catch (error) {
+        console.error('Error registering user:', error);
+        return res.status(500).json({ msg: 'Server error, user not added' });
     }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if(!isMatch){
-      return  res.status(400).json({ message: 'Invalid email or password' });
-    }
-    const token = jwt.sing({userId : user._id , role: user.role}, secret,{expiresIn: '1h'});
-    res.status(200).json({
-      message: 'Login successful',
-      token,
-      role:user.role
-  });
-} catch (error) {
-  return   res.status(500).json({ message: 'Error registering user', error: error.message  });
-
-}
 };
 
-module.exports = {
-  registerUser,
-  loginUser
-}
+const loginUser = async(req,res)=>{
+  const{email , password}= req.body;
+  console.log( req.body);
+       try {
+        const user = await User.findOne({ email });
+        console.log(user);
+        
+        if (!user) {
+          return res.status(400).json({ message: 'Invalid credentials' });
+        }
+    
+        // Compare entered password with the stored hash
+        const isMatch = await bcrypt.compare(password, user.password);
+        console.log(isMatch)
+        
+        if (!isMatch) {
+          return res.status(400).json({ message: 'Invalid credentials' });
+        }
+    
+        // Generate JWT Token
+        const token = jwt.sign(
+          { userId: user._id },
+          secret,
+          { expiresIn: '10h' }  
+        );
+    
+        // Send the response with token and user role
+        res.status(200).json({
+          token,
+          role: user.role,  
+        });
+       } catch (error) {
+        
+       }
+};
+
+module.exports = {registerUser , loginUser}
