@@ -13,6 +13,7 @@ const LoginPage = ()=>{
             // Save the token and role to Loacal Stoarage 
             localStorage.setItem('token ' , token);
             localStorage.setItem('role ' , role);
+            // Role wise redireact the Pages On the basis of role
             if (role === "admin") {
                 window.location.href = "/admin-dashboard";
               } else {
