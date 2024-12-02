@@ -22,7 +22,7 @@ const RegisterPage = () => {
     }
 
     try {
-      const response = await axios.post("/api/register", formData, {
+      const response = await axios.post("http://localhost:8000/api/register", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       message.success(response.data.msg);
