@@ -38,7 +38,7 @@ const RegisterPage = () => {
 
   return (
     <div style={{ maxWidth: 600, margin: "50px auto" }}>
-      <h2>Register User</h2>
+      <h2 style={{textAlign:"center"}}>Register User</h2>
       <Form
         form={form}
         layout="vertical"
@@ -79,8 +79,8 @@ const RegisterPage = () => {
         >
           <Select placeholder="Select role">
             <Option value="admin">Admin</Option>
-            <Option value="user">User</Option>
-            <Option value="editor">Editor</Option>
+            <Option value="author">Auther</Option>
+            <Option value="reader">Reader</Option>
           </Select>
         </Form.Item>
 
@@ -96,7 +96,7 @@ const RegisterPage = () => {
           <Upload
             listType="picture"
             maxCount={1}
-            beforeUpload={() => false} // Prevent automatic upload
+            beforeUpload={() => false} 
           >
             <Button icon={<UploadOutlined />}>Upload Profile Picture</Button>
           </Upload>
