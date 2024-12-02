@@ -17,7 +17,11 @@ const registerUser = async(req,res)=>{
            return res.status(400).json({msg:"User is Already Existing "});
          }
         //  const image = req.file ? req.file[0].path : null;
-        const imagefile = req.files?.image?.[0]?.filename
+        const imagefile = req.file?.file?.name;
+        // const imagefile = req.file?.file?.name;
+
+
+        console.log(imagefile,"1imagefile")
    
          const newUser = {
            userName , 

@@ -18,8 +18,10 @@ const RegisterPage = () => {
     formData.append("role", values.role);
     formData.append("bio", values.bio);
     if (values.image) {
-      formData.append("image", values.image.file.originFileObj);
+      formData.append("image", values.image.file.name);
     }
+
+    console.log(values.image,"112");
 
     try {
       const response = await axios.post("http://localhost:8000/api/register", formData, {
